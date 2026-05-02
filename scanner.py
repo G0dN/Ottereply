@@ -116,8 +116,11 @@ class Scanner:
             )
 
             try:
+                '''
+                this is the issue resolved by gpt-5.5, the scanner used to use [job.bot_pid] instead of all_bot_pids
+                '''
                 quotes = self.client.find_quotes_of_bot(
-                    job.tid, [job.bot_pid], replied_pids
+                    job.tid, all_bot_pids, replied_pids
                 )
             except Exception as e:
                 logger.warning(

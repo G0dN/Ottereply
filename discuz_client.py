@@ -21,17 +21,29 @@ class DiscuzClient:
         username: str = "",
         password: str = "",
         cookie_file: str = "",
-    ) -> None:
+    ) -> None:  # meaning that this function returns nothing, unneccesary
+        '''
+        it seems that the author is very afraid of crashing
+        '''
         self.base_url: str = base_url or settings.DISCUZ_BASE_URL
         self.username: str = username or settings.DISCUZ_USERNAME
         self.password: str = password or settings.DISCUZ_PASSWORD
-        self.cookie_file: str = cookie_file or settings.BOT_COOKIE_FILE
+        self.cookie_file: str = cookie_file or settings.BOT_COOKIE_FILE  # only the file
+        '''
+        these can simply be wriiten in the form of configurations
+        USER_AGENT=os.getenv(
+            "USER_AGENT",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/120.0.0.0 Safari/537.36",
+        )
+        '''
         self.user_agent: str = (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
             "Chrome/120.0.0.0 Safari/537.36"
         )
-        self.session: requests.Session = requests.Session()
+        self.session: requests.Session = requests.Session()  # self.session = requests.Session(), save connections/cookies/headers
         self.session.headers.update({"User-Agent": self.user_agent})
 
     def load_cookies(self) -> None:
@@ -41,7 +53,10 @@ class DiscuzClient:
         try:
             with open(cookie_path, "r", encoding="utf-8") as f:
                 cookie_list = json.load(f)
-            # cookie_list may be a list of dicts (browser format) or a dict (bot format)
+            # "cookie_list may be a list of dicts (browser format) or a dict (bot format)" are you sure?
+            '''
+            this if-else very likely to be abundant, the format has already been addressed
+            '''
             if isinstance(cookie_list, list):
                 for c in cookie_list:
                     self.session.cookies.set(

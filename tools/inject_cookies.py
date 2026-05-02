@@ -1,11 +1,5 @@
-#!/usr/bin/env python3
-"""Inject browser cookies into bot's cookie store.
-
-Usage:
-  python tools/inject_cookies.py --clipboard    ← recommended: read from clipboard
-  python tools/inject_cookies.py                ← show instructions
-  python tools/inject_cookies.py cookies.json   ← read from file
-"""
+# this is a tool used to read the cookie from the clipboard or a file path(due to the input limitation of terminal)
+# the instructions will be printed without any arguments in the input
 import json
 import os
 import subprocess
@@ -18,23 +12,30 @@ load_dotenv(override=True)
 
 username = os.getenv("DISCUZ_USERNAME", "bot_user")
 domain = os.getenv("DISCUZ_BASE_URL", "https://localhost").rstrip("/")
-host = domain.split("://")[-1].split("/")[0]
+host = domain.split("://")[-1].split("/")[0]  # remove parts before and including ://, then remove parts after and including /
 
 output = Path(os.getenv("BOT_COOKIE_FILE", f"cookies/{username}.cookies.json"))
-output.parent.mkdir(parents=True, exist_ok=True)
+output.parent.mkdir(parents=True, exist_ok=True)  # automatically create the folder of cookies (though actually unneccesary)
 
 use_clipboard = "--clipboard" in sys.argv
 file_arg = next((a for a in sys.argv[1:] if not a.startswith("--")), None)
 
-if use_clipboard:
+if use_clipboard:  # mode clipboard
     try:
+        '''
+        this is very likely going to induce failure on windows
+        '''
         raw = subprocess.check_output(["pbpaste"], text=True).strip()
     except (subprocess.CalledProcessError, FileNotFoundError):
         print("⚠ Could not read clipboard. Try --file instead.")
         sys.exit(1)
-elif file_arg:
+elif file_arg:  # mode file path
     raw = Path(file_arg).read_text(encoding="utf-8").strip()
 else:
+    '''
+    these instructions can be outdated and lead to failure
+    I need to reminisce how did I get my current cookie...
+    '''
     print(f"Site:       {domain}")
     print(f"Cookie file: {output}")
     print()
@@ -81,7 +82,7 @@ if not parsed:
     sys.exit(1)
 
 with open(output, "w", encoding="utf-8") as f:
-    json.dump(parsed, f, ensure_ascii=False, indent=2)
+    json.dump(parsed, f, ensure_ascii=False, indent=2)  # address Chinese, indent
 
 print(f"✓ {len(parsed)} cookies saved to {output}")
 print("Now run: python main.py")

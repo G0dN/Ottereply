@@ -29,7 +29,9 @@ class Settings:
     LLM_MODEL: str
     LLM_SYSTEM_PROMPT: str
 
-
+'''
+this should be rewritten due to the principal of "let it crash"
+'''
 def _load_settings() -> Settings:
     username = os.getenv("DISCUZ_USERNAME", "bot_user")
     return Settings(
