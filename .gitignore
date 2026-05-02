@@ -1,0 +1,8 @@
+.env
+data/
+*.lock
+logs/
+cookies/*.json
+.venv/
+__pycache__/
+*.pyc
