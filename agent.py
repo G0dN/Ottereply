@@ -86,7 +86,7 @@ def _build_followup_prompt(author: str, context: str) -> str:
         parts.append(f"已有讨论：\n{context}")
     parts.append(
         f"上一楼是 {author} 引用了你的发言并给出了回复。"
-        "请针对 {author} 的最新回复写一个简短回应（2-4句话）。"
+        f"请针对 {author} 的最新回复写一个简短回应（2-4句话）。"
     )
     return "\n\n".join(parts)
 

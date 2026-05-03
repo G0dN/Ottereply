@@ -50,8 +50,16 @@ def _load_settings() -> Settings:
         LLM_BASE_URL=os.getenv("LLM_BASE_URL", "https://api.openai.com/v1").rstrip("/"),
         LLM_API_KEY=os.getenv("LLM_API_KEY", ""),
         LLM_MODEL=os.getenv("LLM_MODEL", "gpt-4o-mini"),
-        LLM_SYSTEM_PROMPT=os.getenv("LLM_SYSTEM_PROMPT", "你是一个技术论坛用户，回复简短自然，2-4句话，引发讨论。"),
+        LLM_SYSTEM_PROMPT=_load_prompt(os.getenv("LLM_SYSTEM_PROMPT_FILE", "system_prompt.txt")),
     )
+
+
+def _load_prompt(path: str) -> str:
+    from pathlib import Path
+    p = Path(path)
+    if p.exists():
+        return p.read_text(encoding="utf-8").strip()
+    return "你是一个技术论坛用户，回复简短自然，2-4句话。"
 
 
 def _parse_int_list(raw: str) -> list[int]:
